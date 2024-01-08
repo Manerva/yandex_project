@@ -88,9 +88,17 @@ class Ui_Form(object):
         self.comboBox_2.setGeometry(QtCore.QRect(220, 140, 161, 20))
         self.comboBox_2.setObjectName("comboBox_2")
 
-        for i in json.loads(mvid[2])["0"].keys():
-            if json.loads(mvid[2])['0'][str(i)]:
-                self.comboBox_2.addItem(i)
+        conkp = sqlite3.connect('films_db.sqlite')
+        curkp = conkp.cursor()
+        reskp = curkp.execute(f"SELECT * FROM films WHERE id = {mvid[0]}")
+
+        dsfad = reskp.fetchone()
+
+        for i in json.loads(dsfad[2])["0"].keys():
+            if json.loads(dsfad[2])['0'][str(i)]:
+                self.comboBox_2.addItem(str(int(i) + 1))
+
+        conkp.close()
 
         self.comboBox.currentIndexChanged.connect(self.update_read_variable)
         self.text1_4 = QtWidgets.QLabel(self.widget)
@@ -169,20 +177,39 @@ class Ui_Form(object):
     def update_read_variable(self, index):
         self.read = str(index)
         self.update_second_combobox()
-
+        # for i in json.loads(dsfad[2])["0"].keys():
+        #     if json.loads(dsfad[2])['0'][str(i)]:
+        #         print(dsfad)
+        #         self.comboBox_2.addItem(i)
     def update_second_combobox(self):
-        datak = json.loads(self.mvid[2])
+        # datak = json.loads(self.mvid[2])
+
+
+        conkp = sqlite3.connect('films_db.sqlite')
+        curkp = conkp.cursor()
+        reskp = curkp.execute(f"SELECT * FROM films WHERE id = {self.mvid[0]}")
+
+        datak = json.loads(reskp.fetchone()[2])
 
         for j in range(10):
             if datak[self.read][str(j)]:
                 self.comboBox_2.setItemText(j, QGuiApplication.translate("Form", f"{j + 1}"))
 
+        conkp.close()
+
         self.comboBox_2.clear()
+
+        conkp = sqlite3.connect('films_db.sqlite')
+        curkp = conkp.cursor()
+        reskp = curkp.execute(f"SELECT * FROM films WHERE id = {self.mvid[0]}")
+
+        datak = json.loads(reskp.fetchone()[2])
 
         for j in range(10):
             if datak[self.read][str(j)]:
                 self.comboBox_2.addItem(QGuiApplication.translate("Form", f"{j + 1}"))
 
+        conkp.close()
     def on_form_closed(self):
         print("Ui_Form is closed")
 
