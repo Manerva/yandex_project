@@ -2,7 +2,7 @@
 
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QMessageBox, QVBoxLayout, QComboBox, QLabel, QDialog
+from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QMessageBox, QVBoxLayout, QComboBox, QLabel, QDialog, QAction
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGuiApplication
 import sqlite3
@@ -339,9 +339,62 @@ class Ui_MovieUI(object):
         QtCore.QMetaObject.connectSlotsByName(MovieUI)
         con.close()
 
+        MovieUI.setObjectName("MovieUI")
+        MovieUI.resize(435, 290)
+        MovieUI.setMinimumSize(QtCore.QSize(435, 290))
+        MovieUI.setMaximumSize(QtCore.QSize(435, 290))
+
+        menubar = MovieUI.menuBar()
+        help_menu = menubar.addMenu("Помощь")
+
+        about_action = QAction("Версия", MovieUI)
+        about_action.triggered.connect(self.show_about_dialog)
+
+        about_PR = QAction("О приложении", MovieUI)
+        about_PR.triggered.connect(self.show_about_PR_dialog)
+
+        help_menu.addAction(about_action)
+        help_menu.addAction(about_PR)
+
+        menubar.raise_()
+
+    def show_about_PR_dialog(self):
+        about_dialog = QDialog()
+        about_dialog.setWindowTitle("About")
+        about_dialog.setGeometry(100, 100, 300, 100)
+
+        label = QLabel(about_dialog)
+        label.setAlignment(Qt.AlignCenter)
+
+        layout = QVBoxLayout(about_dialog)
+        layout.addWidget(label)
+
+        message = "Покупка билетов на сеансы в кинотеатре MoreCinema"
+        label.setText(message)
+
+        about_dialog.exec_()
+
+
+    def show_about_dialog(self):
+        about_dialog = QDialog()
+        about_dialog.setWindowTitle("About")
+        about_dialog.setGeometry(100, 100, 300, 100)
+
+        label = QLabel(about_dialog)
+        label.setAlignment(Qt.AlignCenter)
+
+        layout = QVBoxLayout(about_dialog)
+        layout.addWidget(label)
+
+        message = "Version 1.0"
+        label.setText(message)
+
+        about_dialog.exec_()
+
     def retranslateUi(self, MovieUI):
         _translate = QtCore.QCoreApplication.translate
         MovieUI.setWindowTitle(_translate("MovieUI", "Покупка билетов в кино"))
+
     def show_buy_dialog(self, movie_id):
         buy_dialog = BuyDialog(movie_id)
         buy_dialog.exec_()
