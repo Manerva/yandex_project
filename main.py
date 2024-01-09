@@ -22,6 +22,7 @@ class Ui_Form(object):
         self.label.setText("")
         self.label.setPixmap(QtGui.QPixmap(f'{mvid[4]}'))
         self.label.setObjectName("label")
+        self.label.setScaledContents(True)
         self.text1 = QtWidgets.QLabel(self.widget)
         self.text1.setGeometry(QtCore.QRect(218, 13, 221, 21))
         self.text1.setMinimumSize(QtCore.QSize(5, 0))
